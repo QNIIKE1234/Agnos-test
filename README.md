@@ -7,9 +7,9 @@ Designed for instant updates between Patient Form UI and Staff View Dashboard.
 
 
 ## Frontend Links
-
-Patient Form : https://agnos-test-git-main-qniike1234s-projects.vercel.app/patient-form |
- Staff View : https://agnos-test-git-main-qniike1234s-projects.vercel.app/staff-view |
+Home : https://agnos-test-git-main-qniike1234s-projects.vercel.app/home 
+Patient Form : https://agnos-test-git-main-qniike1234s-projects.vercel.app/patient-form 
+Staff View : https://agnos-test-git-main-qniike1234s-projects.vercel.app/staff-view 
 
 
 
