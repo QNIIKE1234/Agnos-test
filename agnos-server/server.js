@@ -6,7 +6,7 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 
-// ใช้ PORT จาก environment (เวลาไปลง Render/Railway) ถ้าไม่มีให้ใช้ 8080 ตอน dev
+
 const port = process.env.WS_PORT || "ws://localhost:8080";
 console.log(" Using WS_PORT:", process.env.WS_PORT);
 const patientFormList = [];
@@ -14,7 +14,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // ถ้าอยากให้ทุก origin ก็ใช้ "*" แต่เทสนี้แค่นี้พอ
+    origin: [
+      process.env.ALLOWED_ORIGIN, 
+      "http://localhost:3000", // ถ้ายัง test local
+    ],
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
