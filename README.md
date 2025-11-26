@@ -9,10 +9,14 @@ Designed for instant updates between Patient Form UI and Staff View Dashboard.
 ## Frontend Links
 | Role | URL |
 |------|-----|
-| Patient Form | https://agnos-test-git-main-qniike1234s-projects.vercel.app/patient-form |
-| Staff View | https://agnos-test-git-main-qniike1234s-projects.vercel.app/staff-view |
-| Home (optional) | https://agnos-test-git-main-qniike1234s-projects.vercel.app/home |
+| Patient Form | https://agnos-test-rose.vercel.app/patient-form |
+| Staff View |https://agnos-test-rose.vercel.app/staff-view|
+| Home | https://agnos-test-rose.vercel.app/home|
 
+## Frontend Links
+Home : https://agnos-test-rose.vercel.app/home
+Patient Form : https://agnos-test-rose.vercel.app/patient-form 
+Staff View : https://agnos-test-rose.vercel.app/staff-view 
 
 ## WebSocket Endpoint
 
