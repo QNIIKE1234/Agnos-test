@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
 interface PatientFormData {
   firstName: string;
@@ -37,10 +38,10 @@ const PatientForm: React.FC = () => {
   const [isSending, setIsSending] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  // popup success
+  // Popup success
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
-  // เก็บ instance ของ WebSocket ไว้
+  // WebSocket instance reference
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -113,23 +114,7 @@ const PatientForm: React.FC = () => {
       socket.send(JSON.stringify(message));
       console.log("Sent via WS:", message);
       setStatusMessage("Form submitted successfully.");
-      setShowSuccessPopup(true); // แสดง popup
-
-      // ถ้าอยากเคลียร์ฟอร์มหลังส่ง:
-      // setFormData({
-      //   firstName: "",
-      //   middleName: "",
-      //   lastName: "",
-      //   dateOfBirth: "",
-      //   gender: "",
-      //   phoneNumber: "",
-      //   email: "",
-      //   address: "",
-      //   preferredLanguage: "",
-      //   nationality: "",
-      //   emergencyContact: "",
-      //   religion: "",
-      // });
+      setShowSuccessPopup(true);
     } catch (err) {
       console.error("Error sending WS message:", err);
       setStatusMessage("Error while sending data.");
@@ -398,6 +383,16 @@ const PatientForm: React.FC = () => {
               {isSending ? "Submitting..." : "Submit"}
             </button>
           </form>
+
+          {/* Back to Home Button */}
+          <div className="mt-4 text-center">
+            <Link
+              href="/home"
+              className="text-sm text-gray-500 hover:text-gray-700 underline"
+            >
+              Back to Home
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -416,6 +411,12 @@ const PatientForm: React.FC = () => {
               onClick={() => setShowSuccessPopup(false)}
             >
               OK
+            </button>
+            <button
+              className="mt-3 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"
+              onClick={() => (window.location.href = "/")}
+            >
+              Back to Home
             </button>
           </div>
         </div>

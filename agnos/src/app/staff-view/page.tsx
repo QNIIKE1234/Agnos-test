@@ -1,6 +1,6 @@
-// agnos/src/app/staff-view/page.tsx
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
 interface PatientData {
   firstName: string;
@@ -33,18 +33,18 @@ const StaffView = () => {
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    // URL ต้องตรงกับที่ใช้บน Patient
-    const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "http://localhost:8080";
+    const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080";
+
     fetch(`${WS_URL}/api/patient-list`)
       .then((res) => {
         if (!res.ok) {
           console.error("Failed to fetch patient list");
           return null;
         }
-        return res.json(); // ส่งต่อ json
+        return res.json();
       })
       .then((data) => {
-        if (!data) return; // ถ้าข้างบน error
+        if (!data) return;
         console.log("Received patient list:", data.patients);
 
         const list = data.patients as PatientData[];
@@ -57,9 +57,7 @@ const StaffView = () => {
 
         setPatients(initialRecords);
       })
-      .catch((err) => {
-        console.error("Error fetching patient list:", err);
-      });
+      .catch((err) => console.error("Error fetching patient list:", err));
 
     const socket = new WebSocket(WS_URL);
     socketRef.current = socket;
@@ -83,7 +81,6 @@ const StaffView = () => {
       try {
         const data = JSON.parse(event.data);
 
-        // รองรับ message แบบที่เราส่งจาก Patient
         if (data.type === "PATIENT_FORM") {
           const payload = data.payload as PatientData;
 
@@ -93,7 +90,7 @@ const StaffView = () => {
             receivedAt: new Date().toLocaleString(),
           };
 
-          setPatients((prev) => [newRecord, ...prev]); // ตัวใหม่อยู่บนสุด
+          setPatients((prev) => [newRecord, ...prev]);
           console.log("Received patient data:", payload);
         } else {
           console.log("Unknown message:", data);
@@ -110,7 +107,6 @@ const StaffView = () => {
 
   const selectedPatient = patients.find((p) => p.id === selectedId) || null;
 
-  // กรณียังไม่มีข้อมูลเข้ามาเลย
   if (patients.length === 0) {
     return (
       <div className="bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8">
@@ -125,6 +121,12 @@ const StaffView = () => {
             {status === "closed" &&
               "WebSocket disconnected. Please check server connection."}
           </p>
+          <Link
+            href="/home"
+            className="inline-block mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
+          >
+            Back to Home
+          </Link>
         </div>
       </div>
     );
@@ -137,24 +139,34 @@ const StaffView = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-blue-600">
             Patient List
           </h1>
-          <span
-            className={`text-xs px-2 py-1 rounded-full ${status === "open"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
+          <div className="flex items-center gap-3">
+            <span
+              className={`text-xs px-2 py-1 rounded-full ${
+                status === "open"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
               }`}
-          >
-            WS: {status.toUpperCase()}
-          </span>
+            >
+              WS: {status.toUpperCase()}
+            </span>
+            <Link
+              href="/home"
+              className="text-xs text-gray-500 hover:text-gray-700 underline"
+            >
+              Back to Home
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {/* List ด้านซ้าย */}
+          {/* List */}
           <div className="md:col-span-1 border-r pr-0 md:pr-4">
             <h2 className="font-semibold text-gray-700 mb-2">Patients</h2>
             <div className="space-y-2 max-h-80 overflow-y-auto">
               {patients.map((p) => {
-                const fullName = `${p.data.firstName} ${p.data.middleName ? p.data.middleName + " " : ""
-                  }${p.data.lastName}`;
+                const fullName = `${p.data.firstName} ${
+                  p.data.middleName ? p.data.middleName + " " : ""
+                }${p.data.lastName}`;
 
                 const isSelected = p.id === selectedId;
 
@@ -162,10 +174,11 @@ const StaffView = () => {
                   <button
                     key={p.id}
                     onClick={() => setSelectedId(p.id)}
-                    className={`w-full text-left p-2 rounded-lg border text-sm ${isSelected
+                    className={`w-full text-left p-2 rounded-lg border text-sm ${
+                      isSelected
                         ? "bg-blue-50 border-blue-400"
                         : "bg-gray-50 border-transparent hover:bg-gray-100"
-                      }`}
+                    }`}
                   >
                     <div className="font-semibold text-gray-800">
                       {fullName || "Unnamed Patient"}
@@ -179,7 +192,7 @@ const StaffView = () => {
             </div>
           </div>
 
-          {/* รายละเอียดด้านขวา */}
+          {/* Details */}
           <div className="md:col-span-2">
             <h2 className="font-semibold text-gray-700 mb-2">Details</h2>
 
@@ -194,10 +207,11 @@ const StaffView = () => {
                 <div className="flex justify-between items-center mb-2">
                   <div>
                     <div className="text-lg font-bold text-gray-800">
-                      {`${selectedPatient.data.firstName} ${selectedPatient.data.middleName
+                      {`${selectedPatient.data.firstName} ${
+                        selectedPatient.data.middleName
                           ? selectedPatient.data.middleName + " "
                           : ""
-                        }${selectedPatient.data.lastName}`}
+                      }${selectedPatient.data.lastName}`}
                     </div>
                     <div className="text-xs text-gray-500">
                       Received: {selectedPatient.receivedAt}
