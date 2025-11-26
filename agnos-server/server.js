@@ -19,6 +19,7 @@ app.use(
       "http://localhost:3000", // ถ้ายัง test local
     ],
     methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
   })
 );
 
